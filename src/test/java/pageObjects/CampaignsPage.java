@@ -126,6 +126,9 @@ public class CampaignsPage extends BasePage
 	
 	//3rd and 4th step
 	
+	private @FindBy(xpath = "//app-dropdown[@labelname='Email Deliverability']//select")
+	WebElement emailDeliverability_dropdown;
+	
 	private @FindBy(xpath = "//div[@formgroupname='domain_percentage']//input")
 	List<WebElement> emaildomain_inputfields;
 	
@@ -444,6 +447,7 @@ public class CampaignsPage extends BasePage
 	public void clickOnProceedButtonOnThirdstep()
 	{
 		scrollUntilElementVisible(proceedButton_on3rdStep);
+		scrollBottomofPage();
 		waitElementHelper(proceedButton_on3rdStep);
 		proceedButton_on3rdStep.click();
 	}
@@ -477,18 +481,17 @@ public class CampaignsPage extends BasePage
 		waitElementHelper(saveButton_on3rdStep);
 		saveButton_on3rdStep.click();
 	}
-//	public void setAttributeDropdownRandomly() throws InterruptedException
-//	{
-//
-//		Select selectAttribute = new Select(dropdown);
-//		List<WebElement> options = selectAttribute.getOptions();
-//
-//		int countOptions = options.size();
-//		int randomIndex = (int) (Math.random() * (countOptions - 1)) + 1;
-//   
-//		selectAttribute.selectByIndex(randomIndex);
-//
-//	}
+	public void setEmailDeliverabilityDropdownRandomly() throws InterruptedException
+	{
+		Select selectdeliveribility = new Select(emailDeliverability_dropdown);
+		List<WebElement> options = selectdeliveribility.getOptions();
+
+		int countOptions = options.size();
+		int randomIndex = (int) (Math.random() * (countOptions - 1)) + 1;
+   
+		selectdeliveribility.selectByIndex(randomIndex);
+
+	}
 	
 	public void clickOnStartCampaignButton()
 	{
@@ -850,11 +853,16 @@ public class CampaignsPage extends BasePage
 
 		for (WebElement domainfield : emaildomain_inputfields)
 		{
-			Thread.sleep(2000);
-			System.out.println("test1--");
-			domainfield.clear();
-			domainfield.sendKeys(String.valueOf(valuePerField));
-			System.out.println("test2--");
+			try {
+				domainfield.clear();
+				domainfield.sendKeys(String.valueOf(valuePerField));
+			}catch(org.openqa.selenium.StaleElementReferenceException e) {
+				Thread.sleep(2000);
+				domainfield.clear();
+				domainfield.sendKeys(String.valueOf(valuePerField));
+			}
+			
+			
 		}
 
 	}

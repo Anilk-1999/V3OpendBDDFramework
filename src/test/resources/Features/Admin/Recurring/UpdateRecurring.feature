@@ -12,7 +12,7 @@ Feature: Recurring Updation
    Then Verify that the admin is navigated to the recurring home page
    
   @Smoke
-  Scenario: The admin creates a new recurring
+  Scenario: The admin update the recurring
    When Clicks on edit button from kebab menu dropdown 
    Then Verify the whether it is first step of campaign
    And Select a business type

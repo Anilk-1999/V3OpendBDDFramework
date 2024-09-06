@@ -1,6 +1,11 @@
 package stepDefinitions;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.TextStyle;
 import java.util.Arrays;
+import java.util.Locale;
 
 import org.testng.Assert;
 
@@ -78,6 +83,38 @@ public class RecurringTest extends BaseClass
 	public void the_admin_should_be_redirected_to_recurring_home_page() throws InterruptedException 
 	{
 	   Assert.assertEquals(signin.getPageHeading(), "Recurring");
+	}
+	
+	
+	@When("Select a life time email scheduling")
+	public void Select_a_life_time_email_scheduling()
+	{
+		campaignsPage.selectOptionInDropdown("Please Select Email Scheduling", "Create a Lifetime Campaign");
+	}
+	
+	@When("Select a schedule date and start time and select schedule days")
+	public void Select_schedule_date_and_start_time_and_select_schedule_days() throws InterruptedException
+	{
+		ZoneId londonZone = ZoneId.of("Europe/London");
+        LocalDate currentDate = LocalDate.now(londonZone);
+        LocalDate futuredate = currentDate.plusDays(2);
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String formattedCurrentDate = currentDate.format(dateFormatter);
+        String formattedEndDate = futuredate.format(dateFormatter);
+
+		String[] getFuturedate = formattedEndDate.split("-");
+		String getyear = getFuturedate[0];
+		String getFutureday = getFuturedate[2];
+		int dayAsNumber = Integer.parseInt(getFutureday);//Convert the day to an integer to remove leading zero to till 9
+	    String getDay=Integer.toString(dayAsNumber);
+
+		String getMonth = futuredate.getMonth().getDisplayName(TextStyle.SHORT, Locale.ENGLISH);
+		System.out.println("End Month : " + getMonth);
+		
+		
+        campaignsPage.setStartDate(getDay, getMonth, getyear);
+		campaignsPage.setStartTimeAsFutureTime();
+		campaignsPage.selectAllScheduleDays();
 	}
 
 	/*-----------------------------------Update recurring-------------------------------------*/

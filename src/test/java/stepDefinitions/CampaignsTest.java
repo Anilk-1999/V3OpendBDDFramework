@@ -270,6 +270,12 @@ public class CampaignsTest extends BaseClass
 		campaignsPage.setEmailDomains(100);
 	}
 	
+	@When("Select a standard email domain")
+	public void Select_a_standard_email_domain()
+	{
+		campaignsPage.setRadioButtons("Standard");
+		campaignsPage.SelectOptionInPopupDropdown("Select Include Email Domain", null, "Select Include Email Domain");
+	}
 
 	
 	/*--------------------------------------------campaign home page------------------------------------------*/
