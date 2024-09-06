@@ -1,6 +1,14 @@
 package pageObjects;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.TextStyle;
 import java.util.List;
+import java.util.Locale;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.ElementClickInterceptedException;
 import org.openqa.selenium.WebDriver;
@@ -21,6 +29,7 @@ public class CampaignsPage extends BasePage
 	//Add campaigns
 	//1st step
 	
+
 	private @FindBy(xpath = "//div[@class='sidebar-body ps mm-active']/ul/li")
 	List<WebElement> sidebar_menu;
 	
@@ -116,6 +125,10 @@ public class CampaignsPage extends BasePage
 	WebElement previousButton_on2ndStep;
 	
 	//3rd and 4th step
+	
+	private @FindBy(xpath = "//div[@formgroupname='domain_percentage']//input")
+	List<WebElement> emaildomain_inputfields;
+	
 	private @FindBy(xpath = "//input[@id='ageMinInput']")
 	WebElement minAge_textfield;
 	
@@ -193,6 +206,7 @@ public class CampaignsPage extends BasePage
 	
 	private @FindBy(xpath = "(//button[.=' Proceed'])[2]")
 	WebElement proceedButton_recurringthird;
+
 	
 	//Home page Elements
 	
@@ -463,6 +477,18 @@ public class CampaignsPage extends BasePage
 		waitElementHelper(saveButton_on3rdStep);
 		saveButton_on3rdStep.click();
 	}
+//	public void setAttributeDropdownRandomly() throws InterruptedException
+//	{
+//
+//		Select selectAttribute = new Select(dropdown);
+//		List<WebElement> options = selectAttribute.getOptions();
+//
+//		int countOptions = options.size();
+//		int randomIndex = (int) (Math.random() * (countOptions - 1)) + 1;
+//   
+//		selectAttribute.selectByIndex(randomIndex);
+//
+//	}
 	
 	public void clickOnStartCampaignButton()
 	{
@@ -580,9 +606,7 @@ public class CampaignsPage extends BasePage
 			waitForLoaderToClose(loader);
 			waitElementHelper(startdatePicker_Icon);
 			startdatePicker_Icon.click();
-		} 
-		else
-		{
+		} else{
 			waitForLoaderToClose(loader);
 			waitElementHelper(emailStatusdatePicker_Icon);
 			emailStatusdatePicker_Icon.click();
@@ -613,11 +637,11 @@ public class CampaignsPage extends BasePage
 
 		if (advanceRadioButtonColor.equalsIgnoreCase("4px solid rgb(128, 195, 65)")) 
 		{
+			waitForLoaderToClose(loader);
 			waitElementHelper(enddatePicker_Icon);
 			enddatePicker_Icon.click();
-		}
-		else
-		{
+		}else{
+			waitForLoaderToClose(loader);
 			waitElementHelper(startdatePicker_Icon);
 			startdatePicker_Icon.click();
 		}
@@ -630,35 +654,137 @@ public class CampaignsPage extends BasePage
 		Select selectYear = new Select(year_dropdown);
 		selectYear.selectByVisibleText(year);
 
-		for (WebElement dayincalender : days_inCalender) 
-		{
+		for (WebElement dayincalender : days_inCalender) {
 			String daysColor = dayincalender.getCssValue("color");
 			System.out.println("get day color : " + daysColor);
-			if (daysColor.equalsIgnoreCase("rgba(0, 0, 0, 1)") || daysColor.equalsIgnoreCase("rgba(255, 255, 255, 1)"))
-			{
-				if (dayincalender.getText().equalsIgnoreCase(day)) 
-				{
+			System.out.println("dayincalender : "+dayincalender.getText());
+			if (!daysColor.equalsIgnoreCase("rgba(206, 206, 206, 1)") && dayincalender.getText().equalsIgnoreCase(day)) {
 					waitElementHelper(dayincalender);
+					Thread.sleep(2000);
 					dayincalender.click();
+					System.out.println("inside the calender");
 					break;
-				}
 			}
 		}
+	}	
+	
+	public void setStartDateAsCurrentDateAutomaticaly() throws InterruptedException {
+		ZoneId londonZone = ZoneId.of("Europe/London");
+		LocalDate currentDate = LocalDate.now(londonZone);
 
+		DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		String formattedCurrentDate = currentDate.format(dateFormatter);
+
+		String[] getcurrentdate = formattedCurrentDate.split("-");
+		String getCurrentyear = getcurrentdate[0];
+		String getCurrentday = getcurrentdate[2];
+		String getCurrentMonth = currentDate.getMonth().getDisplayName(TextStyle.SHORT, Locale.ENGLISH);
+		System.out.println("Current Month : " + getCurrentMonth);
+
+		String advanceRadioButtonColor = advanceOption_radioButton.getCssValue("border");
+
+		if (advanceRadioButtonColor.equalsIgnoreCase("4px solid rgb(128, 195, 65)")) {
+			waitForLoaderToClose(loader);
+			waitElementHelper(startdatePicker_Icon);
+			startdatePicker_Icon.click();
+		} else {
+			waitForLoaderToClose(loader);
+			waitElementHelper(emailStatusdatePicker_Icon);
+			emailStatusdatePicker_Icon.click();
+		}
+
+		waitElementHelper(month_dropdown);
+		Select selectMonth = new Select(month_dropdown);
+		selectMonth.selectByVisibleText(getCurrentMonth);
+
+		waitElementHelper(year_dropdown);
+		Select selectYear = new Select(year_dropdown);
+		selectYear.selectByVisibleText(getCurrentyear);
+
+		for (WebElement dayincalender : days_inCalender) {
+			if (dayincalender.getText().equalsIgnoreCase(getCurrentday)) {
+				waitElementHelper(dayincalender);
+				dayincalender.click();
+				break;
+			}
+		}
 	}
 	
-	public void setStartTime(String hours,String minutes)
+	public void setEndDateAsGraterthenStartDateAutomaticaly(int days) throws InterruptedException 
 	{
+		 ZoneId londonZone = ZoneId.of("Europe/London");
+         LocalDate currentDate = LocalDate.now(londonZone);
+         LocalDate endDate = currentDate.plusDays(days);
+         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+         String formattedCurrentDate = currentDate.format(dateFormatter);
+         String formattedEndDate = endDate.format(dateFormatter);
+
+		String[] getEnddate = formattedEndDate.split("-");
+		String getEndyear = getEnddate[0];
+		String getEndday = getEnddate[2];
+		int dayAsNumber = Integer.parseInt(getEndday);//Convert the day to an integer to remove leading zero to till 9
+	    String endDay=Integer.toString(dayAsNumber);
+
+		String getendMonth = endDate.getMonth().getDisplayName(TextStyle.SHORT, Locale.ENGLISH);
+		System.out.println("End Month : " + getendMonth);
+
+		String advanceRadioButtonColor = advanceOption_radioButton.getCssValue("border");
+
+		if (advanceRadioButtonColor.equalsIgnoreCase("4px solid rgb(128, 195, 65)")) {
+			waitForLoaderToClose(loader);
+			waitElementHelper(enddatePicker_Icon);
+			enddatePicker_Icon.click();
+		} else {
+			waitForLoaderToClose(loader);
+			waitElementHelper(startdatePicker_Icon);
+			startdatePicker_Icon.click();
+		}
+
+		waitElementHelper(month_dropdown);
+		Select selectMonth = new Select(month_dropdown);
+		selectMonth.selectByVisibleText(getendMonth);
+
+		waitElementHelper(year_dropdown);
+		Select selectYear = new Select(year_dropdown);
+		selectYear.selectByVisibleText(getEndyear);
+		
+		for (WebElement dayincalender : days_inCalender) {
+			String daysColor = dayincalender.getCssValue("color");
+			System.out.println("get day color : " + daysColor);
+			System.out.println("dayincalender : "+dayincalender.getText());
+			if (!daysColor.equalsIgnoreCase("rgba(206, 206, 206, 1)") && dayincalender.getText().equalsIgnoreCase(endDay)) {
+					waitElementHelper(dayincalender);
+//					Thread.sleep(2000);
+					dayincalender.click();
+					System.out.println("inside the calender");
+					break;
+			}
+		}
+	}
+
+	
+	public void setStartTimeAsFutureTime()
+	{
+        ZonedDateTime londonTime = ZonedDateTime.now(ZoneId.of("Europe/London"));
+        LocalTime newLondonTime = londonTime.toLocalTime().plusMinutes(35);
+        
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+        String formattedTime = newLondonTime.format(timeFormatter);
+
+        String[] timeParts = formattedTime.split(":");
+        String hour = timeParts[0];
+        String minute = timeParts[1];	
+		
 		waitElementHelper(startTime_inHours);
 		startTime_inHours.clear();
-		startTime_inHours.sendKeys(hours);
+		startTime_inHours.sendKeys(hour);
 		
 		waitElementHelper(startTime_inMinutes);
 		startTime_inMinutes.clear();
-		startTime_inMinutes.sendKeys(minutes);
+		startTime_inMinutes.sendKeys(minute);
 	}
 	
-	public void selectScheduleDays(List<String> days)
+	public void selectSpecificScheduleDays(List<String> days)
 	{
 		for(WebElement selectDay:Select_days)
 		{
@@ -672,6 +798,18 @@ public class CampaignsPage extends BasePage
 					selectDay.click();
 				}
 			}
+		}
+	}
+	
+	public void selectAllScheduleDays() 
+	{
+		for (WebElement selectDay : Select_days) 
+		{
+			String getday = selectDay.getText();
+			System.out.println("Schedule days : " + getday);
+
+			waitElementHelper(selectDay);
+			selectDay.click();
 		}
 	}
 	
@@ -700,6 +838,27 @@ public class CampaignsPage extends BasePage
 		waitElementHelper(proceedButton_recurringthird);
 		proceedButton_recurringthird.click();
 	}
+	
+	public void setEmailDomains(int totalValue) throws InterruptedException
+	{
+		int numberOfFields = emaildomain_inputfields.size();
+		int valuePerField = totalValue / numberOfFields; // Distribute equally
+		int remaining = totalValue % numberOfFields; // Handle any remainder
+		
+		System.out.println("valuePerField : "+valuePerField);
+		System.out.println("remainder : "+remaining);
+
+		for (WebElement domainfield : emaildomain_inputfields)
+		{
+			Thread.sleep(2000);
+			System.out.println("test1--");
+			domainfield.clear();
+			domainfield.sendKeys(String.valueOf(valuePerField));
+			System.out.println("test2--");
+		}
+
+	}
+	
 	
 	
 	/*--------------------------------------------home page implementation---------------------------------------------*/
@@ -876,14 +1035,7 @@ public class CampaignsPage extends BasePage
 	    }
 	}
 
-	
-	
-	
-	
-	
-	
-	
-	
+		
 	
 }
 	

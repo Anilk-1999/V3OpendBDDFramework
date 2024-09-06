@@ -219,10 +219,15 @@ public class CampaignsTest extends BaseClass
 	   List<String> days=Arrays.asList("Tue");
 		
 	   campaignsPage.selectOptionInDropdown("Please Select Email Scheduling", "Create a Campaign Schedule");
-	   campaignsPage.setStartTime("14", "10");
-	   campaignsPage.setStartDate("03", "Sep", "2024");
-	   campaignsPage.setEndDate("04", "Sep", "2024");
-	   campaignsPage.selectScheduleDays(days);
+	   campaignsPage.setStartTimeAsFutureTime();
+//	   campaignsPage.setStartDate("03", "Sep", "2024");
+//	   campaignsPage.setEndDate("8", "Oct", "2024");
+//	   campaignsPage.selectSpecificScheduleDays(days);
+//	   campaignsPage.setStartDateAsCurrentDateAutomaticaly();
+	   campaignsPage.setEndDateAsGraterthenStartDateAutomaticaly(3);
+	   campaignsPage.selectAllScheduleDays();
+	   
+	   
 	}
 
 	@When("Click on schedule campaign button")
@@ -242,6 +247,30 @@ public class CampaignsTest extends BaseClass
 	{
 	    Assert.assertEquals(signin.getPageHeading(), "Campaigns");
 	}
+	
+	
+	@When("Select a immediate email scheduling")
+	public void Select_immediate_email_scheduling() throws InterruptedException
+	{
+		campaignsPage.selectOptionInDropdown("Please Select Email Scheduling", "Start Campaign Immediately");
+		campaignsPage.setAudienceReachopend("7000");
+	}
+	
+	@When("Click on start campaign button")
+	public void Click_on_start_campaign_button()
+	{
+		campaignsPage.clickOnStartCampaignButton();
+	}
+	
+	@When("Select a custom email domain")
+	public void Select_a_custom_email_domain() throws InterruptedException
+	{
+		campaignsPage.setRadioButtons("Custom");
+		campaignsPage.SelectOptionInPopupDropdown("Select Include Email Domain", null, "Select Include Email Domain");
+		campaignsPage.setEmailDomains(100);
+	}
+	
+
 	
 	/*--------------------------------------------campaign home page------------------------------------------*/
 	

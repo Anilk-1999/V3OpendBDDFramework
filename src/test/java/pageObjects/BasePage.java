@@ -62,7 +62,11 @@ public class BasePage
 		js.executeScript("window.scrollTo(0, document.body.scrollHeight);");	
 	}
 	
-	
+	public void scrollDownNumberofpixels()
+	{
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		js.executeScript("window.scrollBy(0,1000)");
+	}
 	
 	
 }
