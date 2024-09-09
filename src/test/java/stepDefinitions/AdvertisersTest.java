@@ -162,5 +162,64 @@ public class AdvertisersTest extends BaseClass
 		campaignsPage.verifyDynomicTableWithPagination(columnName, expectedData);
 	}
 	
+	@When("Clicks on view button from kebab menu dropdown")
+	public void clicks_on_view_button_from_kebab_menu_dropdown() throws InterruptedException 
+	{
+	    campaignsPage.handleKebabMenuDropdownForUserSpecifiedTableDataDynamically("Automobile", "  View");
+	}
+
+	@Then("Verify that the admin should navigate to the overview advertiser page")
+	public void verify_that_the_admin_should_navigate_to_the_overview_advertiser_page() throws InterruptedException 
+	{
+	    Assert.assertEquals(advertiserPage.getOverviewtabText(), "Overview");
+	}
+
+	@When("Clicks on {string} tab")
+	public void clicks_on_profile_tab(String tabName) throws InterruptedException 
+	{
+	    advertiserPage.clickOnIndividualAdvertiserTabs(tabName);
+	}
+
+	@When("Clicks an edit button on company information section")
+	public void clicks_an_edit_button_on_company_information_section() 
+	{
+		advertiserPage.clickOnEditButtonInProfileInfo();
+	}
+	    
+
+	@When("Update some of the input fields and click on update button")
+	public void update_some_of_the_input_field_() throws InterruptedException
+	{
+		Thread.sleep(1000);
+		advertiserPage.setBusinessVat("5");
+		advertiserPage.setCompanyRegNumber(setRandomalphanumber());
+		advertiserPage.updateButton();
+	}
+	@Then("Verify that the company information successfully updated with the confirmation message")
+	public void verify_that_the_company_information_successfully_updated_with_the_confirmation_message() throws InterruptedException
+	{
+	    Assert.assertEquals(signin.getConfirmationMessge(), "Advertiser profile updated successfully");
+	}
+
+	@When("Clicks on {string} accordion and edit button")
+	public void clicks_on_billing_contacts_section_and_edit_button(String billingAccordion) 
+	{
+	   advertiserPage.clickOncollapsedaccordionButton(billingAccordion);
+	   advertiserPage.clickOnEditButtonInProfileInfo();
+	}
+
+	@When("Update some of the fields and click on update button")
+	public void update_some_of_the_fields() 
+	{
+	   advertiserPage.setTelephoneNumber(setRandomMobileNumber());
+	   advertiserPage.updateButton();
+	}
+
+	@Then("Verify that the billing information successfully updated with the confirmation message")
+	public void verify_that_the_billing_information_successfully_updated_with_the_confirmation_message() throws InterruptedException 
+	{
+	   Assert.assertEquals(signin.getConfirmationMessge(), "Updated successfully");
+	}
+	
 	
 }

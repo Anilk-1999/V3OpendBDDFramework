@@ -1,8 +1,13 @@
 package pageObjects;
 
+import java.util.List;
+
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.testng.Assert;
+
+import com.fasterxml.jackson.databind.deser.ValueInstantiator.Gettable;
 
 public class AdvertiserPage extends BasePage
 {
@@ -65,7 +70,44 @@ public class AdvertiserPage extends BasePage
 	
 	private @FindBy(xpath = "//a[.='Leads']")
 	WebElement lead_tab;
-//	@FindBy(xpath = "")WebElement ;
+	
+	private @FindBy(xpath = "//a[text()='Overview']")
+	WebElement overview_tab;
+	
+	private @FindBy(xpath = "//span[@class='row flex-wrap']//a")
+	List<WebElement> individualadveertiser_tabs;
+	
+	private @FindBy(xpath = "(//button[@class='btn edit-btn'])[1]")
+	WebElement editbutton_oncompanyinfo;
+
+	private @FindBy(xpath = "(//button[@class='btn edit-btn'])[2]")
+	WebElement editbutton_onbillingcontact;
+	
+	private @FindBy(xpath = "//button[@class='btn-wide-secondary']")
+	WebElement update_button;
+	
+	private @FindBy(xpath = "//button[@class='accordion-button collapsed']")
+	List<WebElement> collapsedaccordion_buttons;
+	
+	private @FindBy(xpath = "//input[@placeholder='Enter Telephone Number']")
+	WebElement telephone_textfield;
+	
+	/*----------------------------------Advertiser User fields--------------------------*/
+	
+	private @FindBy(xpath = "//input[@placeholder='First Name']")
+	WebElement userfirstName_textfield;
+	
+	private @FindBy(xpath = "//input[@placeholder='Last Name']")
+	WebElement userlastName_textfield;
+	
+	private @FindBy(xpath = "//input[@placeholder='Email Address']")
+	WebElement userEmail_textfield;
+	
+	private @FindBy(xpath = "//input[@placeholder='Telephone']")
+	WebElement usertelePhone_textfield;
+	
+	private @FindBy(xpath = "//button[contains(.,'Add')]")
+	WebElement userAdd_button;
 	
 	
 	public void setBusinessName(String businessName)
@@ -188,6 +230,77 @@ public class AdvertiserPage extends BasePage
 	{
 		waitElementHelper(cancelbutton_onConfirmationpopup);
 		cancelbutton_onConfirmationpopup.click();
+	}
+	
+	public String getOverviewtabText()
+	{
+		waitElementHelper(overview_tab);
+		return overview_tab.getText();
+	}
+	
+	public void clickOnIndividualAdvertiserTabs(String tabName) throws InterruptedException
+	{
+		for(WebElement tab:individualadveertiser_tabs)
+		{
+			String gettabtext=tab.getText();
+			System.out.println("get tab name : "+gettabtext);
+			if(gettabtext.equalsIgnoreCase(tabName)) {
+				waitElementHelper(tab);
+				try {
+					tab.click();
+				}catch(org.openqa.selenium.ElementClickInterceptedException e) {
+					Thread.sleep(1000);
+					tab.click();
+				}
+				
+				break;
+			}
+		} 
+	}
+	
+	public void clickOnEditButtonInProfileInfo()
+	{
+	   if(editbutton_oncompanyinfo.isDisplayed())	
+	   {
+		  waitElementHelper(editbutton_oncompanyinfo);
+		  editbutton_oncompanyinfo.click();
+	   }else {
+		   waitElementHelper(editbutton_onbillingcontact);
+		   editbutton_onbillingcontact.click();
+	   }
+	}
+	
+	public void updateButton()
+	{
+		waitElementHelper(update_button);
+		update_button.click();
+	}
+	
+	public void clickOncollapsedaccordionButton(String accordionName)
+	{
+		for(WebElement collapsedaccordionButton:collapsedaccordion_buttons)
+		{
+			String getAccordionText=collapsedaccordionButton.getText();
+			if(getAccordionText.equalsIgnoreCase(accordionName))
+			{
+				waitElementHelper(collapsedaccordionButton);
+				collapsedaccordionButton.click();
+				break;
+			}
+		}
+	}
+	
+	public void setTelephoneNumber(String telephoneNumber)
+	{
+		waitElementHelper(telephone_textfield);
+		telephone_textfield.clear();
+		telephone_textfield.sendKeys(telephoneNumber);
+	}
+	
+	public void userAddButton()
+	{
+		waitElementHelper(userAdd_button);
+		userAdd_button.click();
 	}
 	
 	
