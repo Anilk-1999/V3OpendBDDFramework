@@ -78,7 +78,13 @@ public class SignInPage extends BasePage
 	{
 		Thread.sleep(1000);
 		waitElementHelper(profile_icon);
-		profile_icon.click();
+		try {
+			profile_icon.click();
+		}catch(org.openqa.selenium.ElementClickInterceptedException e) {
+			Thread.sleep(2000);
+			profile_icon.click();
+		}
+		
 	}
 	
 	public void profileDropdownLinks(String option)

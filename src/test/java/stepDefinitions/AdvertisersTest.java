@@ -1,6 +1,8 @@
 package stepDefinitions;
 
 import java.util.Arrays;
+
+import org.openqa.selenium.By;
 import org.testng.Assert;
 import io.cucumber.java.en.*;
 import pageObjects.AdvertiserPage;
@@ -162,12 +164,14 @@ public class AdvertisersTest extends BaseClass
 		campaignsPage.verifyDynomicTableWithPagination(columnName, expectedData);
 	}
 	
-	@When("Clicks on view button from kebab menu dropdown")
-	public void clicks_on_view_button_from_kebab_menu_dropdown() throws InterruptedException 
+	@When("Clicks on {string} button from kebab menu dropdown")
+	public void clicks_on_view_button_from_kebab_menu_dropdown(String viewButton) throws InterruptedException 
 	{
-	    campaignsPage.handleKebabMenuDropdownForUserSpecifiedTableDataDynamically("Automobile", "  View");
+	    campaignsPage.handleKebabMenuDropdownForUserSpecifiedTableDataDynamically("Automobile", viewButton);
 	}
 
+	/*--------------------------------Advertiser User----------------------------------------------*/
+	
 	@Then("Verify that the admin should navigate to the overview advertiser page")
 	public void verify_that_the_admin_should_navigate_to_the_overview_advertiser_page() throws InterruptedException 
 	{
@@ -175,9 +179,10 @@ public class AdvertisersTest extends BaseClass
 	}
 
 	@When("Clicks on {string} tab")
-	public void clicks_on_profile_tab(String tabName) throws InterruptedException 
+	public void clicks_on_profile_tab(String tabName) throws InterruptedException
 	{
 	    advertiserPage.clickOnIndividualAdvertiserTabs(tabName);
+	    System.out.println("Accordion button name :"+driver.findElement(By.xpath("//button[@class='accordion-button']")).getText());
 	}
 
 	@When("Clicks an edit button on company information section")
@@ -219,6 +224,78 @@ public class AdvertisersTest extends BaseClass
 	public void verify_that_the_billing_information_successfully_updated_with_the_confirmation_message() throws InterruptedException 
 	{
 	   Assert.assertEquals(signin.getConfirmationMessge(), "Updated successfully");
+	}
+	
+	
+	@When("Clicks on {string} tab and click on add button")
+	public void clicks_on_tab_and_click_on_add_button(String tabName) throws InterruptedException 
+	{
+	   advertiserPage.clickOnIndividualAdvertiserTabs(tabName);
+	   advertiserPage.userAddButton();
+	}
+
+	@Then("Verify the admin should navigate to the {string} page from manage users")
+	public void verify_the_admin_should_navigate_to_the_page_from_manage_users(String expectedCardHeader) 
+	{
+	    Assert.assertEquals(advertiserPage.getCardHeader(), expectedCardHeader);
+	}
+
+	@When("Enter all the mandatory fields")
+	public void enter_all_the_mandatory_fields() 
+	{
+		advertiserPage.setUserFirstName(setRandomFirstName());
+		advertiserPage.setUserLastName(setRandomLastName());
+		advertiserPage.setUserEmail(setRandomEmail());
+		campaignsPage.selectOptionInDropdown("select Privileges", "Billing");
+	}
+
+	@When("Click on add user button")
+	public void click_on_add_user_button() 
+	{
+		advertiserPage.userAddButton();
+	}
+
+	@Then("Verify that the advertiser user account successfully created with the confirmation message as {string}")
+	public void verify_that_the_advertiser_user_account_successfully_created_with_the_confirmation_message(String confirmationMessage) throws InterruptedException 
+	{
+	    Assert.assertEquals(signin.getConfirmationMessge(), confirmationMessage);
+	}
+	
+	@When("Select the user from user list and click on {string} button from kebab menu")
+	public void select_the_user_from_user_list_and_click_on_button_from_kebab_menu(String ExpectedButton) throws InterruptedException 
+	{
+	    campaignsPage.handleKebabMenuDropdownForUserSpecifiedTableDataDynamically("Anilyvy Rathodgdg", ExpectedButton);
+	}
+
+	@Then("Veify that the admin should navigate to the {string} page from individual advertiser")
+	public void veify_that_the_admin_should_navigate_to_the_page_from_individual_advertiser(String PageHeader) 
+	{
+	   Assert.assertEquals(advertiserPage.getCardHeader(), PageHeader);
+	}
+
+	@When("made some changes in edit user page and click on update button")
+	public void made_some_changes_in_edit_user_page_and_click_on_update_button() 
+	{
+	    advertiserPage.setUserTelePhoneNumber(setRandomMobileNumber());
+	    advertiserPage.updateButton();
+	}
+
+	@Then("Make sure that the advertiser user details successfully updated with the confirmation message as {string}")
+	public void make_sure_that_the_advertiser_user_details_successfully_updated_with_the_confirmation_message_as(String confirmationMsg) throws InterruptedException 
+	{
+		Assert.assertEquals(signin.getConfirmationMessge(), confirmationMsg);
+	}
+
+	@Then("Verify that the advertiser user account suspended successfully with the confirmation message as {string}")
+	public void verify_that_the_advertiser_user_account_suspended_successfully_with_the_confirmation_message_as(String confirmationMsg) throws InterruptedException 
+	{
+		Assert.assertEquals(signin.getConfirmationMessge(), confirmationMsg);
+	}
+
+	@Then("Verify that the advertiser user account activated successfully with the confirmation message as {string}")
+	public void verify_that_the_advertiser_user_account_activated_successfully_with_the_confirmation_message_as(String confirmationMsg) throws InterruptedException 
+	{
+		Assert.assertEquals(signin.getConfirmationMessge(), confirmationMsg);
 	}
 	
 	

@@ -252,6 +252,9 @@ public class CampaignsPage extends BasePage
 	private @FindBy(xpath = "//button[text()=' Update ']")
 	WebElement recurringupdate_button;
 	
+	private @FindBy(xpath = "//button[@class='accordion-button']")
+	WebElement accordion_button;
+	
 	
 	//Action methods
 	
@@ -1010,8 +1013,9 @@ public class CampaignsPage extends BasePage
 	                        kebabMenuIcon = driver.findElement(By.xpath("//table/tbody/tr[" + rowIndex + "]/td[14]//following::img[@class='options']"));
 	                    } else if (pageHeading.equalsIgnoreCase("Recurring")) {
 	                        kebabMenuIcon = driver.findElement(By.xpath("//table/tbody/tr[" + rowIndex + "]/td[13]//following::img[@class='options']"));
-	                    } else if (pageHeading.equalsIgnoreCase("Manage Advertisers") || pageHeading.equalsIgnoreCase("Manage Publishers")) {
-	                        kebabMenuIcon = driver.findElement(By.xpath("//table/tbody/tr[" + rowIndex + "]/td[7]//following::img[@class='options']"));
+	                    } else if (pageHeading.equalsIgnoreCase("Manage Advertisers") || pageHeading.equalsIgnoreCase("Manage Publishers") || accordion_button.getText().equalsIgnoreCase("Users")) {
+	                        System.out.println("test1----");
+	                    	kebabMenuIcon = driver.findElement(By.xpath("//table/tbody/tr[" + rowIndex + "]/td[7]//following::img[@class='options']"));
 	                    } else {
 	                        kebabMenuIcon = driver.findElement(By.xpath("//table/tbody/tr[" + rowIndex + "]/td[9]//following::img[@class='options']"));
 	                    }

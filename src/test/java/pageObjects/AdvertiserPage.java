@@ -109,6 +109,9 @@ public class AdvertiserPage extends BasePage
 	private @FindBy(xpath = "//button[contains(.,'Add')]")
 	WebElement userAdd_button;
 	
+	private @FindBy(xpath = "//div[@class='card-header']/h4")
+	WebElement card_header;
+	
 	
 	public void setBusinessName(String businessName)
 	{
@@ -302,6 +305,41 @@ public class AdvertiserPage extends BasePage
 		waitElementHelper(userAdd_button);
 		userAdd_button.click();
 	}
+	
+	public String getCardHeader()
+	{
+		waitElementHelper(card_header);
+		return card_header.getText();
+	}
+	
+	public void setUserFirstName(String userFirstName)
+	{
+		waitElementHelper(userfirstName_textfield);
+		userfirstName_textfield.clear();
+		userfirstName_textfield.sendKeys(userFirstName);
+	}
+	
+	public void setUserLastName(String userLastName)
+	{
+		waitElementHelper(userlastName_textfield);
+		userlastName_textfield.clear();
+		userlastName_textfield.sendKeys(userLastName);
+	}
+	
+	public void setUserEmail(String userEmail)
+	{
+		waitElementHelper(userEmail_textfield);
+		userEmail_textfield.clear();
+		userEmail_textfield.sendKeys(userEmail);
+	}
+	
+	public void setUserTelePhoneNumber(String userPhoneNumber)
+	{
+		waitElementHelper(usertelePhone_textfield);
+		usertelePhone_textfield.clear();
+		usertelePhone_textfield.sendKeys(userPhoneNumber);
+	}
+	
 	
 	
 	//advertiser lead methods
