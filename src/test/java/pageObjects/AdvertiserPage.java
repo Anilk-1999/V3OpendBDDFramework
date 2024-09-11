@@ -2,6 +2,7 @@ package pageObjects;
 
 import java.util.List;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -112,6 +113,11 @@ public class AdvertiserPage extends BasePage
 	private @FindBy(xpath = "//div[@class='card-header']/h4")
 	WebElement card_header;
 	
+	private @FindBy(xpath = "//button[@class='accordion-button']")
+	WebElement accordion_button;
+	
+	private @FindBy(xpath = "//button[.='Update']")
+	WebElement userupdate_button;
 	
 	public void setBusinessName(String businessName)
 	{
@@ -339,7 +345,67 @@ public class AdvertiserPage extends BasePage
 		usertelePhone_textfield.clear();
 		usertelePhone_textfield.sendKeys(userPhoneNumber);
 	}
+
+	// Individual advertiser and publisher sub modules
+	public void handleKebabMenuDropdownByUserSpecifiedTableDataDynamically(String tableData, String kebabOption) throws InterruptedException 
+	{
+	    int rowIndex = 0;
+	    boolean found = false;
+	    
+	    // Iterate through pagination
+	    CampaignsPage campaignPage=new CampaignsPage(driver);
+	        // Iterate through table rows
+	        for (int r = 1; r <= campaignPage.table_rows.size(); r++) {
+	            List<WebElement> dynamicTableData = driver.findElements(By.xpath("//table/tbody/tr[" + r + "]/td"));
+	            for (WebElement tabledata : dynamicTableData) 
+	            {
+	                String gettableData = tabledata.getText();
+	                System.out.println("Table data: " + gettableData);
+
+	                if (gettableData.equalsIgnoreCase(tableData))
+	                {
+	                    rowIndex = r;
+	                   
+	                    WebElement kebabMenuIcon = null;
+	                    String getaccordionText=accordion_button.getText();
+
+	                    // Determine which column the kebab menu is in based on the page heading
+	                    if (getaccordionText.equalsIgnoreCase("Users")) {
+	                        kebabMenuIcon = driver.findElement(By.xpath("//table/tbody/tr[" + rowIndex + "]/td[7]//following::img[@class='options']"));
+	                    } else {
+	                        kebabMenuIcon = driver.findElement(By.xpath("//table/tbody/tr[" + rowIndex + "]/td[3]//following::img[@class='options']"));
+	                    }
+
+	                    if (kebabMenuIcon != null)
+	                    {
+	                        kebabMenuIcon.click();
+	                        Thread.sleep(500);
+	                        
+	                        // Iterate through kebab menu options
+	                        for (WebElement kebabMenuOption :campaignPage.editbutton_onkebabdropdown ) 
+	                        {
+	                            System.out.println("Kebab menu option: " + kebabMenuOption.getText());
+	                            if (kebabMenuOption.getText().equalsIgnoreCase(kebabOption)) 
+	                            {
+	                                waitElementHelper(kebabMenuOption);
+	                                kebabMenuOption.click();
+	                                found = true;
+	                                break;
+	                            }
+	                        }
+	                    }
+	                    if (found) break; 
+	                }
+	            }
+	            if (found) break;
+	        }
+	    }
 	
+	public void clickOnUserUpdateButton()
+	{
+		waitElementHelper(userupdate_button);
+		userupdate_button.click();
+	}
 	
 	
 	//advertiser lead methods

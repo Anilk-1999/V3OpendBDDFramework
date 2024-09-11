@@ -216,7 +216,7 @@ public class CampaignsPage extends BasePage
 	private @FindBy(xpath = "//table/thead/tr/th")
 	List<WebElement> table_headers;
 
-	private @FindBy(xpath = "//table/tbody/tr")
+	public @FindBy(xpath = "//table/tbody/tr")
 	List<WebElement> table_rows;
 
 	private @FindBy(xpath = "//table/tbody/tr/td")
@@ -240,7 +240,7 @@ public class CampaignsPage extends BasePage
 	private @FindBy(xpath = "//input[@placeholder='Search by Campaign']")
 	WebElement search_textfield;
 	
-	private @FindBy(xpath = "//div[@class='dropdown-menu show']//li[@class='dropdown-item']//span")
+	public @FindBy(xpath = "//div[@class='dropdown-menu show']//li[@class='dropdown-item']//span")
 	List<WebElement> editbutton_onkebabdropdown;
 	
 	private @FindBy(xpath = "//a[.='Next']")
@@ -252,8 +252,6 @@ public class CampaignsPage extends BasePage
 	private @FindBy(xpath = "//button[text()=' Update ']")
 	WebElement recurringupdate_button;
 	
-	private @FindBy(xpath = "//button[@class='accordion-button']")
-	WebElement accordion_button;
 	
 	
 	//Action methods
@@ -972,9 +970,9 @@ public class CampaignsPage extends BasePage
 	{
 	    int rowIndex = 0;
 	    boolean found = false;
-
+	    
 	    // Iterate through pagination
-	    for (int p = 3; p < pagination_intable.size() - 1; p++)
+	    for (int p = 3; p < pagination_intable.size()-1 ; p++)
 	    {
 	        System.out.println("Pagination size: " + pagination_intable.size());
 	        WebElement pageNumber = driver.findElement(By.xpath("//ngb-pagination/ul/li[" + p + "]/a"));
@@ -987,8 +985,8 @@ public class CampaignsPage extends BasePage
 	            try {
 	                pageNumber.click();
 	            } catch (org.openqa.selenium.ElementClickInterceptedException e) {
-	                scrollBottomofPage();
-	                Thread.sleep(2000);
+//	                scrollBottomofPage();
+//	                Thread.sleep(500);
 	                pageNumber.click();
 	            }
 	        }
@@ -1013,8 +1011,8 @@ public class CampaignsPage extends BasePage
 	                        kebabMenuIcon = driver.findElement(By.xpath("//table/tbody/tr[" + rowIndex + "]/td[14]//following::img[@class='options']"));
 	                    } else if (pageHeading.equalsIgnoreCase("Recurring")) {
 	                        kebabMenuIcon = driver.findElement(By.xpath("//table/tbody/tr[" + rowIndex + "]/td[13]//following::img[@class='options']"));
-	                    } else if (pageHeading.equalsIgnoreCase("Manage Advertisers") || pageHeading.equalsIgnoreCase("Manage Publishers") || accordion_button.getText().equalsIgnoreCase("Users")) {
-	                        System.out.println("test1----");
+	                    } else if (pageHeading.equalsIgnoreCase("Manage Advertisers") || pageHeading.equalsIgnoreCase("Manage Publishers")) {
+	                        System.out.println("test4----");
 	                    	kebabMenuIcon = driver.findElement(By.xpath("//table/tbody/tr[" + rowIndex + "]/td[7]//following::img[@class='options']"));
 	                    } else {
 	                        kebabMenuIcon = driver.findElement(By.xpath("//table/tbody/tr[" + rowIndex + "]/td[9]//following::img[@class='options']"));

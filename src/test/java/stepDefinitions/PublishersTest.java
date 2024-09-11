@@ -71,4 +71,57 @@ public class PublishersTest extends BaseClass
 	public void verify_the_table_should_display_only_publishers_with_the_status_from_column(String expectedData, String columnName) throws InterruptedException {
 		campaignsPage.verifyDynomicTableWithPagination(columnName, expectedData);
 	}
+	
+	/*------------------------------------------Individual publisher supmodules------------------------*/
+	
+	@When("Select a publisher and clicks on {string} button from kebab menu dropdown")
+	public void Select_a_publisher_and_clicks_on_view_button_from_kebab_menu_dropdown(String expectedAction) throws InterruptedException
+	{
+		campaignsPage.handleKebabMenuDropdownForUserSpecifiedTableDataDynamically("DataMixx BlueVolt", expectedAction);
+	}
+	
+	@Then("Verify that the admin should navigate to the overview publisher page")
+	public void verify_that_the_admin_should_navigate_to_the_overview_publisher_page() throws InterruptedException 
+	{
+	    Assert.assertEquals(advertiserPage.getOverviewtabText(), "Overview");
+	}
+	
+	@When("Select the user from publisher user list and click on {string} button from kebab menu")
+	public void select_the_user_from_publisher_user_list_and_click_on_button_from_kebab_menu(String ExpectedButton) throws InterruptedException 
+	{
+	    advertiserPage.handleKebabMenuDropdownByUserSpecifiedTableDataDynamically("User test", ExpectedButton);
+	}
+	
+	@Then("Verify that the publisher user account successfully created with the confirmation message as {string}")
+	public void verify_that_the_publisher_user_account_successfully_created_with_the_confirmation_message(String confirmationMessage) throws InterruptedException 
+	{
+	    Assert.assertEquals(signin.getConfirmationMessge(), confirmationMessage);
+	}
+	
+	@Then("Veify that the admin should navigate to the {string} page from individual publisher")
+	public void veify_that_the_admin_should_navigate_to_the_page_from_individual_publisher(String PageHeader) 
+	{
+	   Assert.assertEquals(advertiserPage.getCardHeader(), PageHeader);
+	}
+	
+	@Then("Make sure that the publisher user details successfully updated with the confirmation message as {string}")
+	public void make_sure_that_the_publisher_user_details_successfully_updated_with_the_confirmation_message_as(String confirmationMsg) throws InterruptedException 
+	{
+		Assert.assertEquals(signin.getConfirmationMessge(), confirmationMsg);
+	}
+	
+	@Then("Verify that the publisher user account suspended successfully with the confirmation message as {string}")
+	public void verify_that_the_publisher_user_account_suspended_successfully_with_the_confirmation_message_as(String confirmationMsg) throws InterruptedException 
+	{
+		Assert.assertEquals(signin.getConfirmationMessge(), confirmationMsg);
+	}
+
+	@Then("Verify that the publisher user account activated successfully with the confirmation message as {string}")
+	public void verify_that_the_publisher_user_account_activated_successfully_with_the_confirmation_message_as(String confirmationMsg) throws InterruptedException 
+	{
+		Assert.assertEquals(signin.getConfirmationMessge(), confirmationMsg);
+	}
+	
+	
+	
 }

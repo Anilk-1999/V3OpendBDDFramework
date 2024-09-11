@@ -264,7 +264,7 @@ public class AdvertisersTest extends BaseClass
 	@When("Select the user from user list and click on {string} button from kebab menu")
 	public void select_the_user_from_user_list_and_click_on_button_from_kebab_menu(String ExpectedButton) throws InterruptedException 
 	{
-	    campaignsPage.handleKebabMenuDropdownForUserSpecifiedTableDataDynamically("Anilyvy Rathodgdg", ExpectedButton);
+	    advertiserPage.handleKebabMenuDropdownByUserSpecifiedTableDataDynamically("Anilgpt Rathodquz", ExpectedButton);
 	}
 
 	@Then("Veify that the admin should navigate to the {string} page from individual advertiser")
@@ -277,7 +277,7 @@ public class AdvertisersTest extends BaseClass
 	public void made_some_changes_in_edit_user_page_and_click_on_update_button() 
 	{
 	    advertiserPage.setUserTelePhoneNumber(setRandomMobileNumber());
-	    advertiserPage.updateButton();
+	    advertiserPage.clickOnUserUpdateButton();
 	}
 
 	@Then("Make sure that the advertiser user details successfully updated with the confirmation message as {string}")
